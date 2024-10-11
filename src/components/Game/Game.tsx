@@ -1,12 +1,15 @@
 import { ChangeEvent, useState } from "react";
 import { Match } from "../../types/scoreBoard.ts";
+import { updateScore } from "../../redux/scoreBoard/scoreBoardSlice.ts";
+import { useAppDispatch } from "../../hooks/storeHooks.ts";
 import styles from "./styles.module.css";
 
-interface GameProps {
+export interface GameProps {
   game: Match;
 }
 
 export function Game({ game }: GameProps) {
+  const dispatch = useAppDispatch();
   const [homeScore, setHomeScore] = useState<number | ''>(game.homeScore);
   const [awayScore, setAwayScore] = useState<number | ''>(game.awayScore);
 
@@ -34,6 +37,14 @@ export function Game({ game }: GameProps) {
     }
   }
 
+  const handleUpdateScore = () => {
+    dispatch(updateScore({
+      id: game.id,
+      homeScore: homeScore || 0,
+      awayScore: awayScore || 0,
+    }));
+  }
+
   return (
     <li className={styles.li} role='listitem'>
       <div>
@@ -59,6 +70,13 @@ export function Game({ game }: GameProps) {
         onChange={handleInputScoreChange('awayScore')}
         min="0"
       />
+
+      <button
+        className={styles.button}
+        onClick={handleUpdateScore}
+      >
+        Update Score
+      </button>
     </li>
   );
 }
