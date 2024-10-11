@@ -2,7 +2,7 @@ import { render, fireEvent, within, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import scoreBoardReducer, { start } from "../../redux/scoreBoard/scoreBoardSlice.ts";
-import { Match } from "../../types/scoreBoard.ts";
+import { mockMatch } from "../../mocks/match.ts";
 import { ScoreBoard } from "./ScoreBoard";
 
 const mockDispatch = jest.fn();
@@ -44,15 +44,6 @@ describe('ScoreBoard', () => {
   });
 
   it('should update input fields correctly, clear when click start button, and display list of matches', async () => {
-    const mockMatch: Match = {
-      id: '1',
-      homeTeam: 'Poland',
-      homeScore: 0,
-      awayTeam: 'Brazil',
-      awayScore: 0,
-      createdAt: new Date().toISOString(),
-    }
-
     const mockedStore = configureStore({
       reducer: scoreBoardReducer,
     });

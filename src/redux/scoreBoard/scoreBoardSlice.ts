@@ -26,10 +26,26 @@ const scoreBoardSlice = createSlice({
 
       // can use push due to immer library used under the hood by redux toolkit
       state.matches.push(newMatch);
+    },
+    updateScore: (state, action: PayloadAction<Pick<Match, 'id' | 'homeScore' | 'awayScore'>>) => {
+      return {
+        ...state,
+        matches: state.matches.map(match => {
+          if (match.id === action.payload.id) {
+            return {
+              ...match,
+              homeScore: action.payload.homeScore,
+              awayScore: action.payload.awayScore,
+            }
+          }
+
+          return match;
+        })
+      }
     }
   }
 })
 
-export const { start } = scoreBoardSlice.actions;
+export const { start, updateScore } = scoreBoardSlice.actions;
 
 export default scoreBoardSlice.reducer;
