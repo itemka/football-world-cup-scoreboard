@@ -1,5 +1,5 @@
 import { ScoreBoard } from "../ScoreBoard/ScoreBoard.tsx";
-import './App.css';
+import './styles.css';
 
 function App() {
   return <ScoreBoard />;
