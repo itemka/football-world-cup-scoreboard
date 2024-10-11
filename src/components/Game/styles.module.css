@@ -1,0 +1,15 @@
+.input {
+  padding: 10px;
+  margin: 0;
+  border: 1px solid #1e1c1c;
+  border-radius: 5px;
+}
+
+.input:not(:last-of-type) {
+  margin-right: 10px;
+}
+
+.li {
+  list-style-type: none;
+  padding-left: 0;
+}

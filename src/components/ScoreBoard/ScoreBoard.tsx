@@ -2,20 +2,27 @@ import { ChangeEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHooks.ts";
 import { start } from "../../redux/scoreBoard/scoreBoardSlice.ts";
 import { scoreBoardSelector } from "../../redux/scoreBoard/selectors.ts";
+import { Match } from "../../types/scoreBoard.ts";
+import { Game } from "../Game/Game.tsx";
 import styles from './styles.module.css';
 
 export function ScoreBoard() {
   const dispatch = useAppDispatch();
   const [homeTeam, setHomeTeam] = useState<string>('');
   const [awayTeam, setAwayTeam] = useState<string>('');
-  const { matches } = useAppSelector(scoreBoardSelector);
+  const { matches: games } = useAppSelector(scoreBoardSelector);
 
-  const handleHomeTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setHomeTeam(event.target.value);
-  }
+  const handleInputTeamChange = (key: Extract<keyof Match, 'homeTeam' | 'awayTeam'>) => {
+    const team = {
+      homeTeam: setHomeTeam,
+      awayTeam: setAwayTeam,
+    } as const;
 
-  const handleAwayTeamChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setAwayTeam(event.target.value);
+    const setTeam = team[key];
+
+    return (event: ChangeEvent<HTMLInputElement>) => {
+      setTeam(event.target.value);
+    }
   }
 
   const handleStartGame = () => {
@@ -37,7 +44,7 @@ export function ScoreBoard() {
           type="text"
           placeholder="Enter Home Team"
           value={homeTeam}
-          onChange={handleHomeTeamChange}
+          onChange={handleInputTeamChange('homeTeam')}
         />
 
         <input
@@ -45,7 +52,7 @@ export function ScoreBoard() {
           type="text"
           placeholder="Enter Away Team"
           value={awayTeam}
-          onChange={handleAwayTeamChange}
+          onChange={handleInputTeamChange('awayTeam')}
         />
 
         <button
@@ -55,12 +62,14 @@ export function ScoreBoard() {
           Start
         </button>
 
-        {Boolean(matches.length) && (
+        <h2>Games in Progress</h2>
+
+        {!games.length && <p>No games in progress</p>}
+
+        {Boolean(games.length) && (
           <ul role='list'>
-            {matches.map((match) => (
-              <li className={styles.li} key={match.id} role='listitem'>
-                {match.homeTeam} - {match.awayTeam}: {match.homeScore} - {match.awayScore}
-              </li>
+            {games.map((game) => (
+              <Game key={game.id} game={game} />
             ))}
           </ul>
         )}
