@@ -8,6 +8,7 @@ export function EnterNewGame() {
   const dispatch = useAppDispatch();
   const [homeTeam, setHomeTeam] = useState<string>('');
   const [awayTeam, setAwayTeam] = useState<string>('');
+  const isStartButtonDisabled = homeTeam.trim() === awayTeam.trim() || !homeTeam.trim() || !awayTeam.trim();
 
   const handleInputTeamChange = (key: Extract<keyof Match, 'homeTeam' | 'awayTeam'>) => {
     const team = {
@@ -23,11 +24,17 @@ export function EnterNewGame() {
   }
 
   const handleStartGame = () => {
-    if (homeTeam.trim() && awayTeam.trim()) {
+    const currentHomeTeam = homeTeam.trim();
+    const currentAwayTeam = awayTeam.trim();
+
+    if (currentHomeTeam !== currentAwayTeam && currentHomeTeam && currentAwayTeam) {
       setHomeTeam('');
       setAwayTeam('');
 
-      dispatch(start({ homeTeam, awayTeam }));
+      dispatch(start({
+        homeTeam: currentHomeTeam,
+        awayTeam: currentAwayTeam,
+      }));
     }
   }
 
@@ -52,7 +59,7 @@ export function EnterNewGame() {
       <button
         className={styles.button}
         onClick={handleStartGame}
-        disabled={!homeTeam.trim() || !awayTeam.trim()}
+        disabled={isStartButtonDisabled}
       >
         Start
       </button>

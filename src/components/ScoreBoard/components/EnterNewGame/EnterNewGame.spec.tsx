@@ -73,4 +73,20 @@ describe('EnterNewGame', () => {
 
     expect(mockDispatch).not.toHaveBeenCalled();
   });
+
+  it('should not start a game if the home and away team names are the same', () => {
+    const { getByPlaceholderText, getByText } = render(<Component />);
+
+    const homeTeamInput = getByPlaceholderText('Enter Home Team');
+    const awayTeamInput = getByPlaceholderText('Enter Away Team');
+    const buttonElement = getByText('Start');
+
+    fireEvent.change(homeTeamInput, { target: { value: 'The same team name' } });
+    fireEvent.change(awayTeamInput, { target: { value: 'The same team name' } });
+
+    fireEvent.click(buttonElement);
+
+    expect(buttonElement).toBeDisabled();
+    expect(mockDispatch).not.toHaveBeenCalled();
+  });
 });
