@@ -1,4 +1,11 @@
-import scoreBoardReducer, { initialState, start, updateScore } from './scoreBoardSlice.ts';
+import scoreBoardReducer, { finish, initialState, start, updateScore } from './scoreBoardSlice.ts';
+
+const addMatch = () => {
+  return scoreBoardReducer(initialState, start({
+    homeTeam: 'Home Team',
+    awayTeam: 'Away Team',
+  }));
+}
 
 describe('scoreBoardSlice', () => {
   const mockDate = '2024-10-11T18:19:29.066Z';
@@ -14,10 +21,7 @@ describe('scoreBoardSlice', () => {
   });
 
   it('should add a new match', () => {
-    const result = scoreBoardReducer(initialState, start({
-      homeTeam: 'Home Team',
-      awayTeam: 'Away Team',
-    }));
+    const result = addMatch();
 
     expect(result.matches).toHaveLength(1);
     expect(result.matches[0]).toEqual({
@@ -31,10 +35,7 @@ describe('scoreBoardSlice', () => {
   });
 
   it('should update the score of a match', () => {
-    const state = scoreBoardReducer(initialState, start({
-      homeTeam: 'Home Team',
-      awayTeam: 'Away Team',
-    }));
+    const state = addMatch();
 
     const result = scoreBoardReducer(state, updateScore({
       id: state.matches[0].id,
@@ -51,5 +52,15 @@ describe('scoreBoardSlice', () => {
       awayScore: 3,
       createdAt: mockDate,
     });
+  });
+
+  it('should remove a match', () => {
+    const state = addMatch();
+
+    const result = scoreBoardReducer(state, finish({
+      id: state.matches[0].id,
+    }));
+
+    expect(result.matches).toHaveLength(0);
   });
 });
