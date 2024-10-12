@@ -19,6 +19,10 @@ const Component = () => (
 );
 
 describe('EnterNewGame', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render component', () => {
     const { getByPlaceholderText, getByText } = render(<Component />);
 
