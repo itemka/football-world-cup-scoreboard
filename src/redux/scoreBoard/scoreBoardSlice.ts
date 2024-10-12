@@ -42,10 +42,20 @@ const scoreBoardSlice = createSlice({
           return match;
         })
       }
+    },
+    finish: (state, action: PayloadAction<Pick<Match, 'id'>>) => {
+      return {
+        ...state,
+        matches: state.matches.filter(match => match.id !== action.payload.id)
+      }
     }
   }
 })
 
-export const { start, updateScore } = scoreBoardSlice.actions;
+export const {
+  start,
+  updateScore,
+  finish,
+} = scoreBoardSlice.actions;
 
 export default scoreBoardSlice.reducer;

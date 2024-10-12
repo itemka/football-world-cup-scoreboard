@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { Match } from "../../../../types/scoreBoard.ts";
-import { updateScore } from "../../../../redux/scoreBoard/scoreBoardSlice.ts";
+import { finish, updateScore } from "../../../../redux/scoreBoard/scoreBoardSlice.ts";
 import { useAppDispatch } from "../../../../hooks/storeHooks.ts";
 import scoreBoardStyles from "../../styles.module.css";
 import styles from "./styles.module.css";
@@ -46,6 +46,10 @@ export function Game({ game }: GameProps) {
     }));
   }
 
+  const handleFinishGame = () => {
+    dispatch(finish({ id: game.id }));
+  }
+
   return (
     <li className={styles.li} role='listitem'>
       <div>
@@ -72,12 +76,21 @@ export function Game({ game }: GameProps) {
         min="0"
       />
 
-      <button
-        className={scoreBoardStyles.button}
-        onClick={handleUpdateScore}
-      >
-        Update Score
-      </button>
+      <div>
+        <button
+          className={scoreBoardStyles.button}
+          onClick={handleUpdateScore}
+        >
+          Update Score
+        </button>
+
+        <button
+          className={scoreBoardStyles.button}
+          onClick={handleFinishGame}
+        >
+          Finish Game
+        </button>
+      </div>
     </li>
   );
 }
