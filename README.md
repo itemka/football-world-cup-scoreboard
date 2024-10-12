@@ -8,6 +8,8 @@ Contents:
 - [Installation](#installation)
 - [Usage](#usage)
 - [Testing](#testing)
+  - [Example Test Using Jest](#example-test-using-jest)
+  - [Example Test Using React Testing Library](#example-test-using-react-testing-library)
 
 ## Features
 
