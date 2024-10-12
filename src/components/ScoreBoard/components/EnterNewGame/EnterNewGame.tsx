@@ -23,7 +23,7 @@ export function EnterNewGame() {
   }
 
   const handleStartGame = () => {
-    if (homeTeam && awayTeam) {
+    if (homeTeam.trim() && awayTeam.trim()) {
       setHomeTeam('');
       setAwayTeam('');
 
@@ -52,6 +52,7 @@ export function EnterNewGame() {
       <button
         className={styles.button}
         onClick={handleStartGame}
+        disabled={!homeTeam.trim() || !awayTeam.trim()}
       >
         Start
       </button>

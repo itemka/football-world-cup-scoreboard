@@ -43,6 +43,7 @@ describe('EnterNewGame', () => {
 
     expect(homeTeamElement).toHaveValue(mockMatch.homeTeam);
     expect(awayTeamElement).toHaveValue(mockMatch.awayTeam);
+    expect(buttonElement).toBeEnabled();
 
     fireEvent.click(buttonElement);
 
@@ -54,5 +55,22 @@ describe('EnterNewGame', () => {
         awayTeam: mockMatch.awayTeam,
       })
     );
+  });
+
+  it('should disable start button when at least one input field is empty', () => {
+    const { getByPlaceholderText, getByText } = render(<Component />);
+
+    const homeTeamElement = getByPlaceholderText('Enter Home Team');
+    const awayTeamElement = getByPlaceholderText('Enter Away Team');
+    const buttonElement = getByText('Start');
+
+    fireEvent.change(homeTeamElement, { target: { value: '   ' } });
+    fireEvent.change(awayTeamElement, { target: { value: mockMatch.awayTeam } });
+
+    expect(buttonElement).toBeDisabled();
+
+    fireEvent.click(buttonElement);
+
+    expect(mockDispatch).not.toHaveBeenCalled();
   });
 });
