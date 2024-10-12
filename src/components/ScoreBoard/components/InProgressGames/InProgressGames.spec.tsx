@@ -31,11 +31,13 @@ describe('InProgressGames', () => {
   it('should render a list of games', () => {
     mockedScoreBoardSelector.mockReturnValue({ matches: [mockMatch] });
 
-    const { getByRole } = render(<Component />);
+    const { getByRole, queryByRole } = render(<Component />);
 
     const ulElement = getByRole('list');
+    const emptyMessageElement = queryByRole('No games in progress');
 
     expect(ulElement).toBeInTheDocument();
+    expect(emptyMessageElement).not.toBeInTheDocument();
     expect(ulElement.children).toHaveLength(1);
 
     const { getAllByRole  } = within(ulElement);
