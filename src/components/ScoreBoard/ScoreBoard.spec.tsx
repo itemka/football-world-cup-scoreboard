@@ -1,91 +1,34 @@
-import { render, fireEvent, within, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import scoreBoardReducer, { start } from "../../redux/scoreBoard/scoreBoardSlice.ts";
-import { mockMatch } from "../../mocks/match.ts";
+import { render } from "@testing-library/react";
 import { ScoreBoard } from "./ScoreBoard";
 
-const mockDispatch = jest.fn();
-const mockSelector = jest.fn();
+const mockedInProgressGames = 'InProgressGames';
+const mockedEnterNewGame = 'EnterNewGame';
+const mockedGamesSummary = 'GamesSummary';
 
-jest.mock('../../hooks/storeHooks.ts', () => ({
-  ...jest.requireActual('../../hooks/storeHooks.ts'),
-  useAppDispatch: () => mockDispatch,
-  useAppSelector: () => mockSelector(),
+jest.mock('./components/InProgressGames/InProgressGames.tsx', () => ({
+  InProgressGames: () => <div>{mockedInProgressGames}</div>,
 }));
 
-const Component = ({ mockedStore }: { mockedStore: ReturnType<typeof configureStore> }) => (
-  <Provider store={mockedStore}>
-    <ScoreBoard />
-  </Provider>
-);
+jest.mock('./components/EnterNewGame/EnterNewGame.tsx', () => ({
+  EnterNewGame: () => <div>{mockedEnterNewGame}</div>,
+}));
+
+jest.mock('./components/GamesSummary/GamesSummary.tsx', () => ({
+  GamesSummary: () => <div>{mockedGamesSummary}</div>,
+}));
 
 describe('ScoreBoard', () => {
-  beforeEach(() => {
-    mockSelector.mockReturnValue({ matches: [] });
-  });
-
   it('should render component', () => {
-    const mockedStore = configureStore({
-      reducer: scoreBoardReducer,
-    });
-
-    const { getByText, getByPlaceholderText } = render(<Component mockedStore={mockedStore} />);
+    const { getByText } = render(<ScoreBoard />);
 
     const titleElement = getByText('Football World Cup Scoreboard');
-    const homeTeamElement = getByPlaceholderText('Enter Home Team');
-    const awayTeamElement = getByPlaceholderText('Enter Away Team');
-    const buttonElement = getByText('Start');
+    const InProgressGamesComponent = getByText(mockedInProgressGames);
+    const EnterNewGameComponent = getByText(mockedEnterNewGame);
+    const GamesSummaryComponent = getByText(mockedGamesSummary);
 
-    expect(titleElement).toBeInTheDocument();
-    expect(homeTeamElement).toBeInTheDocument();
-    expect(awayTeamElement).toBeInTheDocument();
-    expect(buttonElement).toBeInTheDocument();
-  });
-
-  it('should update input fields correctly, clear when click start button, and display list of matches', async () => {
-    const mockedStore = configureStore({
-      reducer: scoreBoardReducer,
-    });
-
-    const { getByPlaceholderText, getByText, getByRole, rerender } = render(<Component mockedStore={mockedStore} />);
-
-    const homeTeamElement = getByPlaceholderText('Enter Home Team');
-    const awayTeamElement = getByPlaceholderText('Enter Away Team');
-    const buttonElement = getByText('Start');
-
-    fireEvent.change(homeTeamElement, { target: { value: mockMatch.homeTeam } });
-    fireEvent.change(awayTeamElement, { target: { value: mockMatch.awayTeam } });
-
-    expect(homeTeamElement).toHaveValue(mockMatch.homeTeam);
-    expect(awayTeamElement).toHaveValue(mockMatch.awayTeam);
-
-    fireEvent.click(buttonElement);
-
-    expect(homeTeamElement).toHaveValue('');
-    expect(awayTeamElement).toHaveValue('');
-    expect(mockDispatch).toHaveBeenCalledWith(
-      start({
-        homeTeam: mockMatch.homeTeam,
-        awayTeam: mockMatch.awayTeam,
-      })
-    );
-
-    mockSelector.mockReturnValue({ matches: [mockMatch] });
-
-    rerender(<Component mockedStore={mockedStore} />);
-
-    await waitFor(() => {
-      const ulElement = getByRole('list');
-
-      expect(ulElement).toBeInTheDocument();
-      expect(ulElement.children).toHaveLength(1);
-
-      const { getByRole: getByRoleWithinUl  } = within(ulElement);
-
-      const liElement = getByRoleWithinUl('listitem');
-
-      expect(liElement).toBeVisible();
-    });
+    expect(titleElement).toBeVisible();
+    expect(InProgressGamesComponent).toBeVisible();
+    expect(EnterNewGameComponent).toBeVisible();
+    expect(GamesSummaryComponent).toBeVisible();
   });
 });

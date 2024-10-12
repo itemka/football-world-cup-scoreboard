@@ -1,12 +1,12 @@
 import { render, fireEvent } from "@testing-library/react";
-import { mockMatch } from "../../mocks/match.ts";
-import { updateScore } from "../../redux/scoreBoard/scoreBoardSlice.ts";
+import { mockMatch } from "../../../../mocks/match.ts";
+import { updateScore } from "../../../../redux/scoreBoard/scoreBoardSlice.ts";
 import { Game } from "./Game.tsx";
 
 const mockDispatch = jest.fn();
 
-jest.mock('../../hooks/storeHooks.ts', () => ({
-  ...jest.requireActual('../../hooks/storeHooks.ts'),
+jest.mock('../../../../hooks/storeHooks.ts', () => ({
+  ...jest.requireActual('../../../../hooks/storeHooks.ts'),
   useAppDispatch: () => mockDispatch,
 }));
 

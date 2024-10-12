@@ -1,7 +1,8 @@
 import { ChangeEvent, useState } from "react";
-import { Match } from "../../types/scoreBoard.ts";
-import { updateScore } from "../../redux/scoreBoard/scoreBoardSlice.ts";
-import { useAppDispatch } from "../../hooks/storeHooks.ts";
+import { Match } from "../../../../types/scoreBoard.ts";
+import { updateScore } from "../../../../redux/scoreBoard/scoreBoardSlice.ts";
+import { useAppDispatch } from "../../../../hooks/storeHooks.ts";
+import scoreBoardStyles from "../../styles.module.css";
 import styles from "./styles.module.css";
 
 export interface GameProps {
@@ -53,7 +54,7 @@ export function Game({ game }: GameProps) {
 
       <input
         data-testid="home-score-input"
-        className={styles.input}
+        className={scoreBoardStyles.input}
         type="number"
         placeholder="Enter Home Team Score"
         value={homeScore}
@@ -63,7 +64,7 @@ export function Game({ game }: GameProps) {
 
       <input
         data-testid="away-score-input"
-        className={styles.input}
+        className={scoreBoardStyles.input}
         type="number"
         placeholder="Enter Away Team Score"
         value={awayScore}
@@ -72,7 +73,7 @@ export function Game({ game }: GameProps) {
       />
 
       <button
-        className={styles.button}
+        className={scoreBoardStyles.button}
         onClick={handleUpdateScore}
       >
         Update Score
